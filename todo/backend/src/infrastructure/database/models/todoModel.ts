@@ -1,10 +1,18 @@
-import { model, Document } from "mongoose";
-import { todoSchema } from "../schemas/todoSchema";
+import { Schema, model, Document } from "mongoose";
 
-export interface TodoDocument extends Document {
+interface TodoDoc extends Document {
   title: string;
   isCompleted: boolean;
   createdAt: Date;
 }
 
-export const TodoModel = model<TodoDocument>("Todo", todoSchema);
+const todoSchema = new Schema(
+  {
+    title: { type: String, required: true },
+    isCompleted: { type: Boolean, default: false }
+  },
+  { timestamps: true }
+);
+
+export const TodoModel = model<TodoDoc>("Todo", todoSchema);
+

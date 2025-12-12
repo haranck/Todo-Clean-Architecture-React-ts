@@ -1,17 +1,18 @@
 import { Router } from "express";
-import { todoController } from "../controllers/todoController";
-import { todoRepository } from "../../infrastructure/database/repository/todoRepository";
-import { todoService } from "../../infrastructure/adapters/todoService";
+
+import{TodoController} from '../controllers/todoController'
+import {TodoRepository} from '../../infrastructure/database/repository/todoRepository'
+import {TodoService} from '../../infrastructure/adapters/todoService'
+
 
 const router = Router();
 
-const repository = todoRepository();
-const service = todoService(repository);
-const controller = todoController(service);
+const repo = new TodoRepository()
+const service = new TodoService(repo)
+const controller = new TodoController(service)
 
-router.get("/", controller.listTodos);
-router.post("/", controller.createTodo);
-router.delete("/:id", controller.deleteTodo);
+router.get('/',controller.list)
+router.post('/',controller.create)
+router.delete('/:id',controller.delete)
 
-export const todoRoutes = router;
-
+export default router

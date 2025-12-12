@@ -1,10 +1,10 @@
 import { ITodoRepository } from "../../domain/interfaces/ITodoRepository";
 
-export const deleteTodoUseCase = (
-  todoRepository: ITodoRepository
-) => async (id: string): Promise<void> => {
-  if (!id) {
-    throw new Error("Id is required");
+export class deleteTodoUseCase{
+  constructor (private repo: ITodoRepository){}
+
+  async execute(id:string){
+    if(!id)throw new Error("ID required")
+      return await this.repo.delete(id)
   }
-  await todoRepository.deleteById(id);
-};
+}

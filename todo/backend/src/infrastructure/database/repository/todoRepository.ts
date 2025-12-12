@@ -1,37 +1,32 @@
-import { ITodoRepository, CreateTodoData } from "../../../domain/interfaces/ITodoRepository";
-import { TodoEntity } from "../../../domain/entities/TodoEntity";
+import { ITodoRepository } from "../../../domain/interfaces/ITodoRepository";
 import { TodoModel } from "../models/todoModel";
-import { TodoDocument } from "../models/todoModel";
+import { TodoEntity } from "../../../domain/entities/TodoEntity";
 
-const mapDocToEntity = (doc: TodoDocument): TodoEntity => ({
-  id: doc._id.toString(),
-  title: doc.title,
-  isCompleted: doc.isCompleted,
-  createdAt: doc.createdAt,
-});
+export class TodoRepository implements ITodoRepository {
+  async create(title: string): Promise<TodoEntity> {
+    const doc = await TodoModel.create({ title });
+    return new TodoEntity(
+      doc._id.toString(),
+      doc.title,
+      doc.isCompleted,
+      doc.createdAt
+    );
+  }
 
-export const todoRepository = (): ITodoRepository => {
-  const create = async (data: CreateTodoData): Promise<TodoEntity> => {
-    const created = await TodoModel.create({
-      title: data.title,
-      isCompleted: false,
-      
-    });
-    return mapDocToEntity(created);
-  };
-
-  const findAll = async (): Promise<TodoEntity[]> => {
+  async findAll(): Promise<TodoEntity[]> {
     const docs = await TodoModel.find().sort({ createdAt: -1 }).exec();
-    return docs.map(mapDocToEntity);
-  };
+    return docs.map(
+      (d) =>
+        new TodoEntity(
+          d._id.toString(),
+          d.title,
+          d.isCompleted,
+          d.createdAt
+        )
+    );
+  }
 
-  const deleteById = async (id: string): Promise<void> => {
+  async delete(id: string): Promise<void> {
     await TodoModel.findByIdAndDelete(id).exec();
-  };
-
-  return {
-    create,
-    findAll,
-    deleteById,
-  };
-};
+  }
+}

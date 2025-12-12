@@ -1,20 +1,11 @@
 import { ITodoRepository } from "../../domain/interfaces/ITodoRepository";
-import { CreateTodoDTO, TodoResponseDTO } from "../dto/TodoDTO";
+import { TodoEntity } from "../../domain/entities/TodoEntity";
 
-export const createTodoUseCase =
-  (todoRepository: ITodoRepository) =>
-  async (dto: CreateTodoDTO): Promise<TodoResponseDTO> => {
-    
-    if (!dto.title || !dto.title.trim()) {
-      throw new Error("Title is required");
-    }
+export class CreateTodoUseCase {
+  constructor(private repo: ITodoRepository) {}
 
-    const todo = await todoRepository.create({ title: dto.title.trim() });
-
-    return {
-      id: todo.id,
-      title: todo.title,
-      isCompleted: todo.isCompleted,
-      createdAt: todo.createdAt.toISOString(),
-    };
-  };
+  async execute(title: string): Promise<TodoEntity> {
+    if (!title.trim()) throw new Error("Title required");
+    return await this.repo.create(title.trim());
+  }
+}

@@ -1,27 +1,28 @@
-import { ITodoService } from "../../application/ports/ITodoService";
-import { CreateTodoDTO, TodoResponseDTO } from "../../application/dto/TodoDTO";
-import { ITodoRepository } from "../../domain/interfaces/ITodoRepository";
-import { createTodoUseCase } from "../../application/useCase/createTodoUseCase";
+import { CreateTodoUseCase } from "../../application/useCase/createTodoUseCase";
 import { listTodosUseCase } from "../../application/useCase/listTodoUseCase";
 import { deleteTodoUseCase } from "../../application/useCase/deleteTodoUseCase";
+import { ITodoRepository } from "../../domain/interfaces/ITodoRepository";
 
-export const todoService = (todoRepository: ITodoRepository): ITodoService => {
-  const createTodo = createTodoUseCase(todoRepository);
-  const listTodos = listTodosUseCase(todoRepository);
-  const deleteTodo = deleteTodoUseCase(todoRepository);
+export class TodoService {
+  private createTodo: CreateTodoUseCase;
+  private listTodos: listTodosUseCase;
+  private deleteTodo: deleteTodoUseCase;
 
-  const createTodoService = async (dto: CreateTodoDTO): Promise<TodoResponseDTO> =>
-    createTodo(dto);
+  constructor(repo: ITodoRepository) {
+    this.createTodo = new CreateTodoUseCase(repo);
+    this.listTodos = new listTodosUseCase(repo);
+    this.deleteTodo = new deleteTodoUseCase(repo);
+  }
 
-  const listTodosService = async (): Promise<TodoResponseDTO[]> =>
-    listTodos();
+  create(title: string) {
+    return this.createTodo.execute(title);
+  }
 
-  const deleteTodoService = async (id: string): Promise<void> =>
-    deleteTodo(id);
+  list() {
+    return this.listTodos.execute();
+  }
 
-  return {
-    createTodo: createTodoService,
-    listTodos: listTodosService,
-    deleteTodo: deleteTodoService,
-  };
-};
+  delete(id: string) {
+    return this.deleteTodo.execute(id);
+  }
+}
