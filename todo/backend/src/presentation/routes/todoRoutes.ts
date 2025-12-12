@@ -5,7 +5,6 @@ import { todoService } from "../../infrastructure/adapters/todoService";
 
 const router = Router();
 
-// here we wire everything (simple DI)
 const repository = todoRepository();
 const service = todoService(repository);
 const controller = todoController(service);
@@ -15,3 +14,4 @@ router.post("/", controller.createTodo);
 router.delete("/:id", controller.deleteTodo);
 
 export const todoRoutes = router;
+
