@@ -1,6 +1,9 @@
-export interface TodoEntity{
-    id:string;
-    title:string;
-    isCompleted:boolean;
-    createdAt:Date;
+export class TodoEntity{
+    constructor (
+        public id:string,
+        public title :string,
+        public isCompleted:boolean,
+        public createdAt:Date
+    ){}
 }
+
