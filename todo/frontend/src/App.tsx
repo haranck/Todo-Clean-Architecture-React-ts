@@ -1,8 +1,7 @@
-import{ useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchTodos, createTodo, deleteTodo } from "./api";
 import type { Todo } from "./api";
 import type { FormEvent } from "react";
-
 
 const App = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -13,6 +12,7 @@ const App = () => {
     setLoading(true);
     try {
       const data = await fetchTodos();
+      console.log("FETCH TODOS RESPONSE:", data);
       setTodos(data);
     } finally {
       setLoading(false);
@@ -28,6 +28,7 @@ const App = () => {
     if (!title.trim()) return;
 
     const newTodo = await createTodo(title.trim());
+    console.log(newTodo)
     setTodos((prev) => [newTodo, ...prev]);
     setTitle("");
   };
@@ -41,7 +42,7 @@ const App = () => {
     <div>
       <h1>Todo List</h1>
 
-      <form onSubmit={handleSubmit} >
+      <form onSubmit={handleSubmit}>
         <input
           placeholder="Enter task"
           value={title}
@@ -52,15 +53,17 @@ const App = () => {
 
       {loading && <p>Loading...</p>}
 
-      <ul >
-        {todos.map((todo) => (
-          <li key={todo.id}>
-            <span>{todo.title}</span>
-            <button onClick={() => handleDelete(todo.id)}>Delete</button>
-          </li>
-        ))}
-        {!loading && todos.length === 0 && <p>No todos yet</p>}
-      </ul>
+      {todos.length && (
+        <ul>
+          {todos.map((todo) => (
+            <li key={todo.id}>
+              <span>{todo.title}</span>
+              <button onClick={() => handleDelete(todo.id)}>Delete</button>
+            </li>
+          ))}
+          {!loading && todos.length === 0 && <p>No todos yet</p>}
+        </ul>
+      )}
     </div>
   );
 };

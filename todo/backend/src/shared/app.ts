@@ -1,9 +1,8 @@
-
 import express, { Express } from "express";
 import cors from "cors";
 import { envConfig } from "../config/envConfig";
 import { connectMongo } from "../config/mongodbConfig";
-import todoRouter from "../presentation/routes/todoRoutes";
+import { TodoRoutes } from "../presentation/routes/todoRoutes";
 
 export class App {
   private readonly app: Express;
@@ -20,7 +19,8 @@ export class App {
   }
 
   private configRoutes(): void {
-    this.app.use("/api/todos", todoRouter);
+    const todoRoutes = new TodoRoutes();
+    this.app.use("/api/todos", todoRoutes.getRoutes());
   }
 
   private async connectDatabase(): Promise<void> {
@@ -39,3 +39,5 @@ export class App {
     }
   }
 }
+
+

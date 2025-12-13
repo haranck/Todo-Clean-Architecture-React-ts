@@ -6,7 +6,9 @@ export class TodoController {
 
   create = async (req: Request, res: Response) => {
     try {
+      console.log('enter the create method in controller');
       const todo = await this.service.create(req.body.title);
+      console.log('the output paass to frontend data')
       res.status(201).json(todo);
     } catch (e: any) {
       res.status(400).json({ message: e.message });
@@ -16,11 +18,12 @@ export class TodoController {
   list = async (req: Request, res: Response) => {
     try {
       const todos = await this.service.list();
+      res.status(200).json(todos)
     } catch (e: any) {
       res.status(400).json({ message: e.message });
     }
   };
-  
+
   delete = async (req: Request, res: Response) => {
     try {
       await this.service.delete(req.params.id);

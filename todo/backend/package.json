@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn src/shared/app.ts",
+    "dev": "ts-node-dev --respawn src/shared/server.ts",
     "build": "tsc",
     "start": "node dist/shared/app.js"
   },
