@@ -38,12 +38,11 @@ const App = () => {
   };
 
   return (
-    <div style={{ maxWidth: 480, margin: "40px auto", padding: 16 }}>
+    <div>
       <h1>Todo List</h1>
 
-      <form onSubmit={handleSubmit} style={{ display: "flex", gap: 8 }}>
+      <form onSubmit={handleSubmit} >
         <input
-          style={{ flex: 1, padding: 8 }}
           placeholder="Enter task"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -53,17 +52,9 @@ const App = () => {
 
       {loading && <p>Loading...</p>}
 
-      <ul style={{ listStyle: "none", padding: 0, marginTop: 16 }}>
+      <ul >
         {todos.map((todo) => (
-          <li
-            key={todo.id}
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              padding: "8px 0",
-              borderBottom: "1px solid #eee",
-            }}
-          >
+          <li key={todo.id}>
             <span>{todo.title}</span>
             <button onClick={() => handleDelete(todo.id)}>Delete</button>
           </li>

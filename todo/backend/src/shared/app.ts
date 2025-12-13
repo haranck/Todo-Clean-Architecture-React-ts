@@ -1,26 +1,41 @@
-import express from "express";
+
+import express, { Express } from "express";
 import cors from "cors";
 import { envConfig } from "../config/envConfig";
 import { connectMongo } from "../config/mongodbConfig";
-import router from '../presentation/routes/todoRoutes'
+import todoRouter from "../presentation/routes/todoRoutes";
 
-const app = express();
+export class App {
+  private readonly app: Express;
 
-app.use(cors());
-app.use(express.json());
-
-app.use("/api/todos", router);
-
-const start = async () => {
-  try {
-    await connectMongo();
-    app.listen(envConfig.port, () => {
-      console.log(`Server running on port ${envConfig.port}`);
-    });
-  } catch (error) {
-    console.error("Failed to start server", error);
-    process.exit(1);
+  constructor() {
+    this.app = express();
+    this.configMiddlewares();
+    this.configRoutes();
   }
-};
 
-start();
+  private configMiddlewares(): void {
+    this.app.use(cors());
+    this.app.use(express.json());
+  }
+
+  private configRoutes(): void {
+    this.app.use("/api/todos", todoRouter);
+  }
+
+  private async connectDatabase(): Promise<void> {
+    await connectMongo();
+  }
+
+  public async listen(): Promise<void> {
+    try {
+      await this.connectDatabase();
+      this.app.listen(envConfig.port, () => {
+        console.log(`Server running on port ${envConfig.port}`);
+      });
+    } catch (error) {
+      console.error("Failed to start server", error);
+      process.exit(1);
+    }
+  }
+}

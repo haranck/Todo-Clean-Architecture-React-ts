@@ -21,7 +21,6 @@ export const createTodo = async (title: string): Promise<Todo> => {
   return res.json();
 }
 
-console.log('helloo')
 
 export const deleteTodo = async (id: string): Promise<void> => {
   await fetch(`${BASE_URL}/${id}`, {
