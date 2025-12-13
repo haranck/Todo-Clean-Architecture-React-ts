@@ -19,7 +19,7 @@ export class TodoRepository implements ITodoRepository {
     const docs = await TodoModel.find()
       .sort({ createdAt: -1 })
       .exec();
-
+    console.log('thisis form todoRepostitry means connected to mongo and send threough the di ')
     return docs.map((d) => ({
       id: d._id.toString(),
       title: d.title,
