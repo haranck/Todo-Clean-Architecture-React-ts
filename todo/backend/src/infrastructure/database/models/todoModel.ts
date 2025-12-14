@@ -12,6 +12,7 @@ const todoSchema = new Schema(
     isCompleted: { type: Boolean, default: false }
   },
   { timestamps: true }
+  
 );
 
 export const TodoModel = model<TodoDoc>("Todo", todoSchema);
